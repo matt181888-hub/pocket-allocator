@@ -14,7 +14,7 @@ block_header_t* next_block_header(block_header_t* current_block);
 bool is_block_free(block_header_t* current_block);
 block_header_t* header_from_data_ptr(void *data);
 
-/* Helper to reset heap before tests */
+
 static void reset_heap(size_t size) {
     bool ok = init_heap(size);
     assert(ok == 0);
@@ -207,7 +207,7 @@ void test_best_fit_chooses_smallest() {
     void *p2 = my_alloc_ff(200);
     void *barrier2 = my_alloc_ff(10);
     void *p3 = my_alloc_ff(50);
-    void *barrier3 = my_alloc_ff(10);  // Prevent p3 from coalescing with remaining space!
+    void *barrier3 = my_alloc_ff(10);  
     
     my_free(p1);
     my_free(p2);
@@ -215,7 +215,7 @@ void test_best_fit_chooses_smallest() {
     
     void *p4 = my_alloc_bf(40);
     
-    assert(p4 == p3);  // Now it should work!
+    assert(p4 == p3);  
 }
 
 /* ============================================================
@@ -251,7 +251,7 @@ void test_integrity_checker_detects_bad_size() {
     reset_heap(1000);
     
     block_header_t *header = (block_header_t*)heap;
-    header->block_size = 9999999;  // Corrupt it!
+    header->block_size = 9999999;  
     
     assert(check_heap_integrity() == false);
 }
@@ -270,24 +270,24 @@ void test_integrity_checker_passes() {
 void test_realloc_shrink() {
     reset_heap(1000);
     void *p = my_alloc_ff(100);
-    void *p2 = my_realloc_ff(p, 50);  // Shrink
-    assert(p == p2);  // Same pointer
+    void *p2 = my_realloc_ff(p, 50);  
+    assert(p == p2);  
 }
 
 void test_realloc_grow_in_place() {
     reset_heap(1000);
     void *p = my_alloc_ff(50);
-    // Next block is free with plenty of space
-    void *p2 = my_realloc_ff(p, 100);  // Grow
-    assert(p == p2);  // Should expand in place
+    
+    void *p2 = my_realloc_ff(p, 100);  
+    assert(p == p2);  
 }
 
 void test_realloc_must_move() {
     reset_heap(1000);
     void *p1 = my_alloc_ff(50);
-    void *p2 = my_alloc_ff(50);  // Block next block
-    void *p3 = my_realloc_ff(p1, 200);  // Must move
-    assert(p1 != p3);  // Different pointer
+    void *p2 = my_alloc_ff(50);  
+    void *p3 = my_realloc_ff(p1, 200);  
+    assert(p1 != p3);  
 }
 
 void test_realloc_preserves_data() {
@@ -295,15 +295,13 @@ void test_realloc_preserves_data() {
     
     int *arr = (int*)my_alloc_ff(10 * sizeof(int));
     
-    // Write some data
     for (int i = 0; i < 10; i++) {
         arr[i] = i * 100;
     }
-    
-    // Realloc to larger size (might move)
+
     arr = (int*)my_realloc_ff(arr, 20 * sizeof(int));
     
-    // Verify original data is intact
+   
     for (int i = 0; i < 10; i++) {
         assert(arr[i] == i * 100);
     }
