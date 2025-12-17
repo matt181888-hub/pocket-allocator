@@ -18,11 +18,7 @@
 uint8_t *heap = NULL;    
 size_t heap_size = 0;
 
-/*
-This function call will be used by the user at the beginning of the program to set their desired heap size.
-The reason we make this heap a custom size is so that the user can intentionally request more space
-then their current heap size allows in order to simulate the OS dynamically giving you more memory.
-*/
+
 
 int init_heap(size_t size){
     if (size < 1 || size > MAX_HEAP_SIZE){
@@ -42,23 +38,20 @@ int init_heap(size_t size){
         return MALLOC_FAIL;
     }
     heap_size = size;
-    block_header_t* header = (block_header_t*)heap; //Create a pointer to a block_header_t, if I dereference this pointer, read/write the first sizeof(block_header_t) bytes as a block_header_t
+    block_header_t* header = (block_header_t*)heap; 
     header->block_size = size - sizeof(block_header_t); 
     header->is_free = true;
     printf("Heap of %ld bytes successfully allocated\n", size);
     return MY_API_SUCCESS;
 }
 
-/*
-This function takes a block_header_t as an argument. It then computes header of the next block 
-by skipping current_blocks header and payload. Returns NULL if it goes beyond the heap. 
-*/
+
 
 block_header_t* next_block_header(block_header_t* current_block) {
     uint8_t* base = (uint8_t*)current_block;
     uint8_t* next = base + sizeof(block_header_t) + current_block->block_size;
 
-    // make sure there is enough space for at least a header
+
     if (next + sizeof(block_header_t) >=  heap + heap_size) {
         return NULL;
     }
@@ -73,7 +66,7 @@ block_header_t* previous_block_header(block_header_t* current_block){
     if (!heap){
         return NULL;
     }
-    block_header_t* present = (block_header_t*)(heap); // start at the beginning of the heap
+    block_header_t* present = (block_header_t*)(heap); 
     while (present != NULL){
         if (next_block_header(present) == current_block){
             return present;
@@ -116,7 +109,7 @@ void *my_alloc_ff(size_t requested_bytes){
     if (requested_bytes % 16 != 0){
         requested_bytes = requested_bytes + (16 - (requested_bytes % 16));
     }
-    block_header_t *current = (block_header_t*)(heap); // start at the beginning of the heap
+    block_header_t *current = (block_header_t*)(heap); 
     while (current != NULL){
         if (current->is_free && current->block_size >= requested_bytes){
             void *p_my_alloc;
@@ -124,7 +117,7 @@ void *my_alloc_ff(size_t requested_bytes){
             p_my_alloc = (uint8_t*)(current) + sizeof(block_header_t);
             current->block_size = requested_bytes;
             current->is_free = false;
-            // now to create a new block_header to come after the the block of allocated data
+            
             size_t left_over_space = original_size - requested_bytes - sizeof(block_header_t);
             if (left_over_space < sizeof(block_header_t)){
                 return p_my_alloc;
@@ -151,7 +144,7 @@ void *my_alloc_bf(size_t requested_bytes){
     if (requested_bytes % 16 != 0){
     requested_bytes = requested_bytes + (16 - (requested_bytes % 16));
     }
-    block_header_t* current = (block_header_t*)(heap); // start at the beginning of the heap
+    block_header_t* current = (block_header_t*)(heap); 
     block_header_t* smallest_block = NULL;
 
     while (current != NULL){
@@ -170,7 +163,7 @@ void *my_alloc_bf(size_t requested_bytes){
     p_my_alloc = (uint8_t*)(smallest_block) + sizeof(block_header_t);
     smallest_block->block_size = requested_bytes;
     smallest_block->is_free = false;
-    // now to create a new block_header to come after the the block of allocated data
+    
     size_t left_over_space = original_size - requested_bytes - sizeof(block_header_t);
     if (left_over_space < sizeof(block_header_t)){
         return p_my_alloc;
@@ -196,12 +189,12 @@ void my_free(void* p){
         return;
     }
     p_block->is_free = true;
-    // Forward coalescing
+    
     block_header_t* next_block = next_block_header(p_block);
     if (next_block && next_block->is_free){
         p_block->block_size = p_block->block_size + sizeof(block_header_t) + next_block->block_size;
     }
-    // Backward coalescing
+    
     block_header_t* previous_block = previous_block_header(p_block);
     if (previous_block && previous_block->is_free){
         previous_block->block_size = previous_block->block_size + sizeof(block_header_t) + p_block->block_size;
