@@ -1,0 +1,18 @@
+# Documentation (local only)
+docs/
+
+# Python virtual environment
+venv/
+
+# Compiled binaries
+*.o
+demo
+test_allocator
+main
+
+# JSON snapshots
+*.json
+
+# OS files
+.DS_Store
+Thumbs.db
