@@ -21,9 +21,15 @@ under the hood? This project can help with that understanding!
 WSL, or MinGW with a modern terminal. The old Command Prompt may not display 
 colors correctly.
 
-1. Edit `src/main.c` to experiment with the allocator
-2. In your terminal, go to the root directory of Pocket-Allocator
-3. Compile and run:
+1. Clone the repository
+ ```bash
+git clone https://github.com/matt181888-hub/pocket-allocator.git
+cd pocket-allocator
+```
+
+2. Edit `src/main.c` to experiment with the allocator
+3. In your terminal, go to the root directory of Pocket-Allocator
+4. Compile and run:
 ```bash
 gcc -o demo src/main.c src/allocator.c
 ./demo
