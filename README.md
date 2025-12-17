@@ -15,16 +15,6 @@ under the hood? This project can help with that understanding!
 - **ASCII visualization**: Color-coded terminal display
 - **JSON export**: For external visualization tools
 
-## Project Structure
-toy-allocator/
-├── README.md 
-├── images/         
-└──  src/
-   ├── allocator.c
-   ├── allocator.h
-   ├── main.c
-   └── test_allocator.c
-
 ## Quick Start Guide
 
 **Note for Windows users:** For best color visualization, use Windows Terminal, 
