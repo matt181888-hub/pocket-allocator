@@ -36,11 +36,11 @@ void visualize_heap();
 
 void print_heap_overview();
 
-void* my_alloc_bf();
+void* my_alloc_bf(size_t requested_bytes);
 
 bool check_heap_integrity();
 
-bool is_valid_header();
+bool is_valid_header(block_header_t* header);
 
 void* my_realloc_general(void* ptr, size_t new_size, bool is_best_fit);
 
