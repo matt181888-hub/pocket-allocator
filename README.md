@@ -73,6 +73,53 @@ int main() {
 
 -If thats the case, everything should be working correctly!
 
+Try this one to see more of the functionality:
+
+```c
+#include "allocator.h"
+
+int main() {
+    // Initialize heap
+    init_heap(1000);
+    
+    // Allocate some blocks with sizes that leave room for splitting
+    void *p1 = my_alloc_ff(80);
+    void *p2 = my_alloc_bf(120);
+    void *p3 = my_alloc_ff(100);
+    
+    printf("=== After initial allocations ===\n");
+    visualize_heap();
+    
+    // Free middle block to create fragmentation
+    my_free(p2);
+    
+    printf("\n=== After freeing middle block ===\n");
+    visualize_heap();
+    
+    // Reallocate with smaller size - finds the freed space!
+    void *p4 = my_alloc_bf(60);
+    
+    printf("\n=== After reallocating (best-fit finds the gap!) ===\n");
+    visualize_heap();
+    
+    // Grow an allocation
+    p1 = my_realloc_ff(p1, 150);
+    
+    printf("\n=== After growing p1 from 80 to 150 bytes ===\n");
+    visualize_heap();
+    
+    // Free everything - watch coalescing!
+    my_free(p1);
+    my_free(p3);
+    my_free(p4);
+    
+    printf("\n=== After freeing all (coalescing in action!) ===\n");
+    visualize_heap();
+    
+    return 0;
+}
+```
+
 ## How it works
 
 **A quick aside:** I am by no means an expert on this subject, in fact I am completely new
