@@ -21,6 +21,18 @@ under the hood? This project can help with that understanding!
 WSL, or MinGW with a modern terminal. The old Command Prompt may not display 
 colors correctly.
 
+This allocator works on all platforms. The ASCII visualization uses Unicode 
+block characters (░ and █) for the best visual experience.
+
+If you see garbled characters instead of blocks, run this 
+command in your terminal before running the program:
+
+```bash
+chcp 65001
+```
+This sets the terminal to UTF-8 encoding, which properly displays the Unicode
+characters.
+
 1. Clone the repository
  ```bash
 git clone https://github.com/matt181888-hub/pocket-allocator.git
